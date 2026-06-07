@@ -1,15 +1,25 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.Extensions.Options;
+using SupportHub.Mvc.Configuration;
+using SupportHub.Mvc.Services.Abstractions;
+using SupportHub.Mvc.Services.Implementations;
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
+builder.Services.AddHttpClient<IApiClient, ApiClient>((serviceProvider, client) =>
+{
+    var apiSettings = serviceProvider.GetRequiredService<IOptions<ApiSettings>>().Value;
+    client.BaseAddress = new Uri(apiSettings.BaseUrl);
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
+builder.Services.AddScoped<ITicketService, TicketService>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
