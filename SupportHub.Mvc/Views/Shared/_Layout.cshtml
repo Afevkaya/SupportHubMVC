@@ -27,6 +27,26 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                     </li>
                 </ul>
+                <div class="d-flex align-items-center">
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <span class="navbar-text me-3">
+                            @User.Identity.Name
+                        </span>
+
+                        <form asp-controller="Auths" asp-action="Logout" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                Logout
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a class="btn btn-outline-primary btn-sm" asp-controller="Auths" asp-action="Login">
+                            Login
+                        </a>
+                    }
+                </div>
             </div>
         </div>
     </nav>
@@ -35,6 +55,7 @@
     <main role="main" class="pb-3">
         @RenderBody()
     </main>
+    
 </div>
 
 <footer class="border-top footer text-muted">

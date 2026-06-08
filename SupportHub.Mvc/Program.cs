@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using SupportHub.Mvc.Configuration;
 using SupportHub.Mvc.Services.Abstractions;
@@ -12,8 +13,17 @@ builder.Services.AddHttpClient<IApiClient, ApiClient>((serviceProvider, client) 
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
 builder.Services.AddScoped<ITicketService, TicketService>();
-
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Auths/Login";
+        options.LogoutPath = "/Auths/Logout";
+        options.ExpireTimeSpan = TimeSpan.FromDays(7);
+    });
 
 var app = builder.Build();
 
@@ -25,7 +35,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
