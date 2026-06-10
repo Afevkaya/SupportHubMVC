@@ -17,7 +17,7 @@ public class AuthsController(IAuthService authService) : Controller
     }
     
     [HttpPost]
-    public async Task<IActionResult> Login(LoginRequest request,  string? returnUrl = null)
+    public async Task<IActionResult> Login(RequestLogin request,  string? returnUrl = null)
     {
         var response = await authService.LoginAsync(request);
         if (response == null)
@@ -46,7 +46,7 @@ public class AuthsController(IAuthService authService) : Controller
         if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
             return Redirect(returnUrl);
         
-        return RedirectToAction("Index", "Home");
+        return RedirectToAction("Index", "Tickets");
     }
     
     [HttpPost]

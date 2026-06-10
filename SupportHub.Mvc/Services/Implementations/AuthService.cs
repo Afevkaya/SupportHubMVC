@@ -7,8 +7,8 @@ namespace SupportHub.Mvc.Services.Implementations;
 
 public class AuthService(IApiClient apiClient) : IAuthService
 {
-    public async Task<LoginResponse?> LoginAsync(LoginRequest loginRequest)
+    public async Task<ResponseLogin?> LoginAsync(RequestLogin requestLogin)
     {
-        return await apiClient.PostAsync<LoginRequest, LoginResponse>(ApiEndpoints.Login, loginRequest);
+        return await apiClient.PostAsync<RequestLogin, ResponseLogin>(ApiEndpoints.Login, requestLogin);
     }
 }
