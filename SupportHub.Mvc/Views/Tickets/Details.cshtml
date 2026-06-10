@@ -1,0 +1,120 @@
+﻿@model SupportHub.Mvc.Models.ViewModels.Tickets.TicketDetailViewModel
+
+@{
+    ViewData["Title"] = "Ticket Detayı";
+}
+
+<div class="page-shell">
+    <div class="d-flex justify-content-between align-items-start gap-3 page-header">
+        <div>
+            <h1 class="h3 mb-1 page-title">@Model.Title</h1>
+            <div class="small page-subtitle">
+                Oluşturulma: @Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")
+                @if (Model.UpdatedDate is not null)
+                {
+                    <span> | Güncellenme: @Model.UpdatedDate.Value.ToString("dd.MM.yyyy HH:mm")</span>
+                }
+            </div>
+        </div>
+
+        <a class="btn btn-outline-secondary" asp-action="Index">
+            Geri Dön
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card content-card">
+                <div class="card-header bg-white">
+                    <h2 class="h5 mb-0">Açıklama</h2>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0 ticket-description">@Model.Description</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card content-card">
+                <div class="card-header bg-white">
+                    <h2 class="h5 mb-0">Bilgiler</h2>
+                </div>
+                <div class="card-body">
+                    <dl class="mb-0 meta-list">
+                        <dt>Durum</dt>
+                        <dd>
+                            <span class="badge text-bg-primary">@Model.Status</span>
+                        </dd>
+
+                        <dt>Öncelik</dt>
+                        <dd class="mb-0">
+                            <span class="badge text-bg-secondary">@Model.Priority</span>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card content-card mt-4">
+        <div class="card-header bg-white">
+            <h2 class="h5 mb-0">Yorumlar</h2>
+        </div>
+
+        <div class="card-body">
+            @if (Model.Comments is null || !Model.Comments.Any())
+            {
+                <div class="alert alert-info mb-0" role="alert">
+                    Henüz yorum bulunmuyor.
+                </div>
+            }
+            else
+            {
+                @foreach (var comment in Model.Comments)
+                {
+                    var avatarText = string.IsNullOrWhiteSpace(comment.AuthorName)
+                        ? "?"
+                        : comment.AuthorName[..1].ToUpper();
+
+                    <div class="comment-item">
+                        <div class="comment-avatar">
+                            @avatarText
+                        </div>
+
+                        <div>
+                            <div class="fw-semibold">@comment.AuthorName</div>
+                            <div class="comment-message">@comment.Message</div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <div class="card content-card mt-4">
+        <div class="card-header bg-white">
+            <h2 class="h5 mb-0">Yorum Ekle</h2>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="AddComment" asp-route-id="@Model.Id" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="mb-3">
+                    <label for="Message" class="form-label">Yorum</label>
+                    <textarea id="Message"
+                              name="Message"
+                              class="form-control"
+                              rows="4"
+                              placeholder="Yorumunuzu yazın..."></textarea>
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">
+                        Yorumu Gönder
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

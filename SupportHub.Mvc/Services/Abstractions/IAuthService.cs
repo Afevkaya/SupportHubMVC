@@ -5,5 +5,5 @@ namespace SupportHub.Mvc.Services.Abstractions;
 
 public interface IAuthService
 {
-    Task<LoginResponse?> LoginAsync(LoginRequest loginRequest);
+    Task<ResponseLogin?> LoginAsync(RequestLogin requestLogin);
 }
