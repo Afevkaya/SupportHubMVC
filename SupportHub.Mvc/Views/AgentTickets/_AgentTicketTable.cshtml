@@ -1,0 +1,35 @@
+@model IReadOnlyList<SupportHub.Mvc.Models.ViewModels.AgentTickets.AgentTicketListItemViewModel>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Baslik</th>
+                <th>Durum</th>
+                <th>Oncelik</th>
+                <th>Tarih</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ticket in Model)
+            {
+                var displayDate = ticket.UpdatedDate ?? ticket.CreatedDate;
+                var dateLabel = ticket.UpdatedDate is null ? "Olusturulma" : "Guncellenme";
+
+                <tr>
+                    <td>@ticket.Title</td>
+                    <td>
+                        <span class="badge text-bg-primary">@ticket.Status</span>
+                    </td>
+                    <td>
+                        <span class="badge text-bg-secondary">@ticket.Priority</span>
+                    </td>
+                    <td>
+                        <div>@displayDate.ToString("dd.MM.yyyy HH:mm")</div>
+                        <div class="small text-muted">@dateLabel</div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

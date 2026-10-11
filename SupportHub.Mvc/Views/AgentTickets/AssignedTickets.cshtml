@@ -1,0 +1,40 @@
+@model SupportHub.Mvc.Models.ViewModels.AgentTickets.AgentTicketListViewModel
+
+@{
+    ViewData["Title"] = "Atanan Ticketlar";
+}
+
+<div class="page-shell">
+    <div class="d-flex justify-content-between align-items-start gap-3 page-header">
+        <div>
+            <h1 class="h3 mb-1 page-title">Atanan Ticketlar</h1>
+            <div class="small page-subtitle">
+                Toplam @Model.TotalCount ticket
+            </div>
+        </div>
+
+        <a class="btn btn-outline-secondary" asp-action="Dashboard">
+            Dashboard
+        </a>
+    </div>
+
+    <div class="card content-card">
+        <div class="card-body">
+            @if (!Model.Items.Any())
+            {
+                <div class="alert alert-info mb-0" role="alert">
+                    Atanmis ticket bulunmamaktadir.
+                </div>
+            }
+            else
+            {
+                <partial name="_AgentTicketTable" model="Model.Items" />
+
+                <div class="d-flex justify-content-between align-items-center small text-muted">
+                    <span>Sayfa @Model.Page / @Model.TotalPages</span>
+                    <span>Sayfa basina @Model.PageSize kayit</span>
+                </div>
+            }
+        </div>
+    </div>
+</div>

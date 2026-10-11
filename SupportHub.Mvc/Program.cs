@@ -14,6 +14,7 @@ builder.Services.AddHttpClient<IApiClient, ApiClient>((serviceProvider, client) 
 });
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAgentTicketService, AgentTicketService>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 

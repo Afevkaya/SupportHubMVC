@@ -1,0 +1,106 @@
+﻿@model SupportHub.Mvc.Models.ViewModels.AgentTickets.AgentTicketDashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="page-shell">
+    <div class="page-header">
+        <h1 class="h3 mb-1 page-title">Agent Dashboard</h1>
+        <div class="small page-subtitle">Atanan ticket özeti</div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-lg-3">
+            <div class="card content-card h-100">
+                <div class="card-body">
+                    <div class="small text-muted mb-2">Atanan</div>
+                    <div class="display-6 fw-semibold">@Model.AssignedTicketsCount</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="card content-card h-100">
+                <div class="card-body">
+                    <div class="small text-muted mb-2">Açık</div>
+                    <div class="display-6 fw-semibold">@Model.OpenTicketsCount</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="card content-card h-100">
+                <div class="card-body">
+                    <div class="small text-muted mb-2">İşlemde</div>
+                    <div class="display-6 fw-semibold">@Model.InProgressTicketsCount</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="card content-card h-100">
+                <div class="card-body">
+                    <div class="small text-muted mb-2">Yanıt Bekliyor</div>
+                    <div class="display-6 fw-semibold">@Model.WaitingTicketsCount</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card content-card">
+        <div class="card-header bg-white">
+            <div class="d-flex justify-content-between align-items-center gap-3">
+                <h2 class="h5 mb-0">Son Ticketlar</h2>
+                <a class="btn btn-outline-primary btn-sm" asp-action="AssignedTickets">
+                    Tümünü Gör
+                </a>
+            </div>
+        </div>
+
+        <div class="card-body">
+            @if (!Model.RecentTickets.Any())
+            {
+                <div class="alert alert-info mb-0" role="alert">
+                    Henüz ticket bulunmamaktadır.
+                </div>
+            }
+            else
+            {
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Başlık</th>
+                            <th>Durum</th>
+                            <th>Öncelik</th>
+                            <th>Tarih</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ticket in Model.RecentTickets)
+                        {
+                            var displayDate = ticket.UpdatedDate ?? ticket.CreatedDate;
+                            var dateLabel = ticket.UpdatedDate is null ? "Oluşturulma" : "Güncellenme";
+
+                            <tr>
+                                <td>@ticket.Title</td>
+                                <td>
+                                    <span class="badge text-bg-primary">@ticket.Status</span>
+                                </td>
+                                <td>
+                                    <span class="badge text-bg-secondary">@ticket.Priority</span>
+                                </td>
+                                <td>
+                                    <div>@displayDate.ToString("dd.MM.yyyy HH:mm")</div>
+                                    <div class="small text-muted">@dateLabel</div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            }
+        </div>
+    </div>
+</div>
