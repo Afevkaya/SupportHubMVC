@@ -34,6 +34,9 @@ public class AuthsController(IAuthService authService) : Controller
             new("access_token", response.AccessToken)
         };
         
+       if(response.Roles != null && response.Roles.Any() && response.Roles.All(role => !string.IsNullOrWhiteSpace(role)))
+            claims.AddRange(response.Roles.Select(role => new Claim(ClaimTypes.Role, role)));
+       
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         var authProperties = new AuthenticationProperties
         {
